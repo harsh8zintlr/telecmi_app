@@ -7,7 +7,7 @@ const WebRTCCall = () => {
   const [loginData, setLoginData] = useState({
     user_id: "",
     password: "",
-    sbc_uri: "",
+    sbc_uri: "sbcind.telecmi.com",
     display_name: "TeleCMI User",
   });
   const [callData, setCallData] = useState({

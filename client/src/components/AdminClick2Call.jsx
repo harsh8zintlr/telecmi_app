@@ -4,11 +4,11 @@ import { adminClick2Call } from "../api/telecmi";
 const AdminClick2Call = () => {
   const [callData, setCallData] = useState({
     user_id: "",
-    secret: localStorage.getItem("adminSecret") || "",
+    secret: "faa1cca3-ac54-4490-a543-6d731c0ce0a2",
     to: "",
-    callerid: "",
-    webrtc: true, // Default value is true
-    followme: false, // Default value is false
+    callerid: "1203203897",
+    webrtc: false, // Default value is true
+    followme: true, // Default value is false
     extra_params: { crm: false },
     token: localStorage.getItem("userToken"),
   });
@@ -125,6 +125,7 @@ const AdminClick2Call = () => {
             <input
               type="checkbox"
               checked={callData.webrtc}
+              disabled={true}
               onChange={(e) => handleWebRTCChange(e.target.checked)}
             />{" "}
             WebRTC (default: true)
