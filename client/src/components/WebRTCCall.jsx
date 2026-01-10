@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import PIOPIY from "piopiyjs";
+import Dialer from "./Dialer";
+import { formatDialNumber } from "../utils/phoneUtils";
 
 const WebRTCCall = () => {
   const [piopiy, setPiopiy] = useState(null);
@@ -92,6 +94,7 @@ const WebRTCCall = () => {
     piopiyInstance.on("hangup", (object) => {
       if (object.code === 200) {
         setCallStatus({ status: "ended", callId: null, incomingCall: null });
+        setCallData((prev) => ({ ...prev, phoneNumber: "" })); // Clear phone number when call ends
         addLog("Call ended", "info");
       }
     });
@@ -99,6 +102,7 @@ const WebRTCCall = () => {
     // Ended
     piopiyInstance.on("ended", (object) => {
       setCallStatus({ status: "idle", callId: null, incomingCall: null });
+      setCallData((prev) => ({ ...prev, phoneNumber: "" })); // Clear phone number when call ends
       addLog("Call ended", "info");
     });
 
@@ -202,8 +206,12 @@ const WebRTCCall = () => {
     }
   };
 
-  const handleMakeCall = (e) => {
-    e.preventDefault();
+  const handleMakeCall = (phoneNum = null, e = null) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    const phoneNumber = phoneNum || callData.phoneNumber;
     setError(null);
     setSuccess(null);
 
@@ -212,27 +220,38 @@ const WebRTCCall = () => {
       return;
     }
 
-    if (!callData.phoneNumber) {
+    if (!phoneNumber) {
       setError("Please enter a phone number");
       return;
     }
 
+    // Format phone number with country code
+    const formattedNumber = formatDialNumber(phoneNumber);
+
     try {
       if (Object.keys(callData.extraParams).length > 0) {
-        piopiy.call(callData.phoneNumber, callData.extraParams);
+        piopiy.call(formattedNumber, callData.extraParams);
       } else {
-        piopiy.call(callData.phoneNumber);
+        piopiy.call(formattedNumber);
       }
       setCallStatus((prev) => ({
         ...prev,
         status: "calling",
         callId: piopiy.getCallId(),
       }));
-      addLog(`Calling ${callData.phoneNumber}`, "info");
+      addLog(`Calling ${formattedNumber}`, "info");
     } catch (err) {
       setError(`Call error: ${err.message}`);
       addLog(`Call error: ${err.message}`, "error");
     }
+  };
+
+  const handleDialerCall = (phoneNumber) => {
+    handleMakeCall(phoneNumber);
+  };
+
+  const handleDialerNumberChange = (phoneNumber) => {
+    setCallData({ ...callData, phoneNumber });
   };
 
   const handleAnswer = () => {
@@ -407,60 +426,59 @@ const WebRTCCall = () => {
           </div>
         )}
 
-        {/* Make Call Section */}
+        {/* Make Call Section with Dialer */}
         {isLoggedIn && (
           <div style={{ marginBottom: "30px" }}>
             <h3>Make Call</h3>
-            <form onSubmit={handleMakeCall}>
-              <div className="form-group">
-                <label>Phone Number *</label>
+            <div style={{ marginBottom: "20px" }}>
+              <Dialer
+                onDial={handleDialerCall}
+                onNumberChange={handleDialerNumberChange}
+                phoneNumber={callData.phoneNumber}
+                disabled={callStatus.status !== "idle"}
+                callStatus={callStatus.status}
+                callId={callStatus.callId}
+                onHold={callStatus.status === "answered" ? handleHold : null}
+                onUnhold={
+                  callStatus.status === "answered" ? handleUnhold : null
+                }
+                onMute={callStatus.status === "answered" ? handleMute : null}
+                onUnmute={
+                  callStatus.status === "answered" ? handleUnmute : null
+                }
+                onHangup={handleHangup}
+              />
+            </div>
+            {/* Manual input option */}
+            <div className="form-group">
+              <label>Or enter number manually:</label>
+              <div style={{ display: "flex", gap: "10px" }}>
                 <input
                   type="text"
                   value={callData.phoneNumber}
                   onChange={(e) =>
                     setCallData({ ...callData, phoneNumber: e.target.value })
                   }
-                  required
-                  placeholder="e.g., 13158050050"
+                  placeholder="e.g., 9876543210"
+                  style={{ flex: 1 }}
+                  disabled={callStatus.status !== "idle"}
                 />
+                <button
+                  type="button"
+                  onClick={(e) => handleMakeCall(null, e)}
+                  className="btn btn-primary"
+                  disabled={
+                    callStatus.status !== "idle" || !callData.phoneNumber
+                  }
+                >
+                  Call
+                </button>
               </div>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={callStatus.status !== "idle"}
+              <small
+                style={{ color: "#666", marginTop: "5px", display: "block" }}
               >
-                Make Call
-              </button>
-            </form>
-          </div>
-        )}
-
-        {/* Call Controls */}
-        {isLoggedIn && callStatus.status !== "idle" && (
-          <div style={{ marginBottom: "30px" }}>
-            <h3>Call Controls</h3>
-            <p>Status: {callStatus.status}</p>
-            {callStatus.callId && <p>Call ID: {callStatus.callId}</p>}
-            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-              {callStatus.status === "answered" && (
-                <>
-                  <button onClick={handleHold} className="btn btn-secondary">
-                    Hold
-                  </button>
-                  <button onClick={handleUnhold} className="btn btn-secondary">
-                    Unhold
-                  </button>
-                  <button onClick={handleMute} className="btn btn-secondary">
-                    Mute
-                  </button>
-                  <button onClick={handleUnmute} className="btn btn-secondary">
-                    Unmute
-                  </button>
-                </>
-              )}
-              <button onClick={handleHangup} className="btn btn-danger">
-                Hangup
-              </button>
+                Country code (91) will be added automatically
+              </small>
             </div>
           </div>
         )}

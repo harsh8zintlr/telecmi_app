@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { adminClick2Call } from "../api/telecmi";
+import { formatDialNumber } from "../utils/phoneUtils";
 
 const AdminClick2Call = () => {
   const [callData, setCallData] = useState({
@@ -52,7 +53,13 @@ const AdminClick2Call = () => {
     setCallResult(null);
 
     try {
-      const response = await adminClick2Call(callData);
+      // Format the "to" number with country code (not callerid)
+      const formattedCallData = {
+        ...callData,
+        to: formatDialNumber(callData.to),
+      };
+
+      const response = await adminClick2Call(formattedCallData);
       setCallResult(response.data);
       setSuccess("Call initiated successfully!");
     } catch (err) {
@@ -104,8 +111,13 @@ const AdminClick2Call = () => {
               value={callData.to}
               onChange={(e) => setCallData({ ...callData, to: e.target.value })}
               required
-              placeholder="e.g., 13158050050"
+              placeholder="e.g., 9876543210"
             />
+            <small
+              style={{ color: "#666", marginTop: "5px", display: "block" }}
+            >
+              Country code (91) will be added automatically
+            </small>
           </div>
           <div className="form-group">
             <label>Caller ID</label>
