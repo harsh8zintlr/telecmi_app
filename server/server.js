@@ -82,7 +82,7 @@ app.post("/api/users/list", async (req, res) => {
     console.error("Error listing users", err.response.data.msg.body);
     res.status(500).json({
       error: "Failed to list users",
-      details: err.message,
+      details: "Failed to list users",
     });
   }
 });
