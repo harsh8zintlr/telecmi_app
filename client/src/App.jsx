@@ -16,7 +16,7 @@ function App() {
   const tabs = [
     { id: "users", label: "Users" },
     { id: "login", label: "User Login" },
-    { id: "click2call", label: "Click2Call" },
+    // { id: "click2call", label: "Click2Call" },
     { id: "admin-click2call", label: "Admin Click2Call" },
     { id: "webrtc", label: "WebRTC Calls" },
     { id: "cdr", label: "Call Records" },
@@ -46,7 +46,7 @@ function App() {
 
       {activeTab === "users" && <Users />}
       {activeTab === "login" && <UserLogin />}
-      {activeTab === "click2call" && <Click2Call />}
+      {/* {activeTab === "click2call" && <Click2Call />} */}
       {activeTab === "admin-click2call" && <AdminClick2Call />}
       {activeTab === "webrtc" && <WebRTCCall />}
       {activeTab === "cdr" && <CDR />}

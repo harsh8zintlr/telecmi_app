@@ -29,7 +29,7 @@ function ensureAppCreds(appid, secret) {
 }
 
 function appBody(extra = {}) {
-  const appid = TELECMI_APP_ID;
+  const appid = Number(TELECMI_APP_ID);
   const secret = TELECMI_APP_SECRET;
   ensureAppCreds(appid, secret);
   return { appid, secret, ...extra };
@@ -72,11 +72,14 @@ app.post("/api/users/list", async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.body;
     const url = `${TELECMI_BASE_URL}/user/list`;
-    const response = await axios.post(url, appBody({ page, limit }));
+    const response = await axios.post(
+      url,
+      appBody({ page: Number(page), limit: Number(limit) })
+    );
     console.log(response);
     res.json(response.data);
   } catch (err) {
-    console.error("Error listing users", err.message);
+    console.error("Error listing users", err.response.data.msg.body);
     res.status(500).json({
       error: "Failed to list users",
       details: err.message,
@@ -101,12 +104,12 @@ app.post("/api/users/add", async (req, res) => {
     const response = await axios.post(
       url,
       appBody({
-        extension,
+        extension: Number(extension),
         name,
         phone_number,
         password,
-        start_time,
-        end_time,
+        start_time: Number(start_time),
+        end_time: Number(end_time),
         sms_alert,
       })
     );
@@ -117,10 +120,10 @@ app.post("/api/users/add", async (req, res) => {
 
     res.json(response.data);
   } catch (err) {
-    console.error("Error creating user", err.message);
+    console.error("Error creating user", err.response.data.msg.body);
     res.status(500).json({
       error: "Failed to create user",
-      details: err.message,
+      details: JSON.stringify(err.response.data.msg.body),
     });
   }
 });
@@ -157,7 +160,7 @@ app.post("/api/users/update", async (req, res) => {
     console.error("Error updating user", err.message);
     res.status(500).json({
       error: "Failed to update user",
-      details: err.message,
+      details: JSON.stringify(err.response.data.msg.body),
     });
   }
 });
@@ -167,7 +170,7 @@ app.post("/api/users/delete", async (req, res) => {
   try {
     const { id } = req.body;
 
-    const url = `${TELECMI_BASE_URL}/user/delete`;
+    const url = `${TELECMI_BASE_URL}/user/remove`;
     const response = await axios.post(url, appBody({ id }));
 
     // Remove from createdUsers
@@ -178,10 +181,10 @@ app.post("/api/users/delete", async (req, res) => {
 
     res.json(response.data);
   } catch (err) {
-    console.error("Error deleting user", err.message);
+    console.error("Error deleting user", err.response.data.msg.body);
     res.status(500).json({
       error: "Failed to delete user",
-      details: err.message,
+      details: JSON.stringify(err.response.data.msg.body),
     });
   }
 });
@@ -570,7 +573,7 @@ app.post("/api/admin/click2call", async (req, res) => {
       token,
     } = req.body;
 
-    const url = `${TELECMI_BASE_URL}/click2call`;
+    const url = `${TELECMI_BASE_URL}/webrtc/click2call`;
     const response = await axios.post(url, {
       user_id,
       secret,
