@@ -84,7 +84,6 @@ app.post("/api/users/list", async (req, res) => {
 
     // ✅ Axios always puts payload in response.data
     return res.status(200).json(response.data);
-
   } catch (err) {
     console.error("User list error:", {
       message: err.message,
@@ -597,7 +596,6 @@ app.post("/api/admin/click2call", async (req, res) => {
       callerid: Number(callerid),
       token,
     });
-    console.log(response);
 
     res.json(response.data);
   } catch (err) {
@@ -615,7 +613,6 @@ app.post("/api/admin/click2call", async (req, res) => {
 app.post("/api/webhooks/cdr", (req, res) => {
   try {
     const data = req.body;
-    console.log("CDR Webhook received:", data);
 
     // Store CDR data
     if (data.cmiuuid) {
@@ -636,7 +633,6 @@ app.post("/api/webhooks/cdr", (req, res) => {
 app.post("/api/webhooks/events", (req, res) => {
   try {
     const data = req.body;
-    console.log("Event Webhook received:", data);
 
     // Store event data
     if (data.cmiuuid) {

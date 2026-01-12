@@ -45,17 +45,30 @@ const Users = () => {
 
     try {
       if (editingUser) {
-        await updateUser({ ...formData, id: editingUser.agent_id });
+        const response = await updateUser({
+          ...formData,
+          id: editingUser.agent_id,
+        });
+        if (response.data.code == 200) {
+          setSuccess("User created successfully");
+          loadUsers();
+        } else {
+          setError(response?.data?.details || "Failed to save user");
+        }
+        loadUsers();
         setSuccess("User updated successfully");
       } else {
         const response = await createUser(formData);
-        if (response.code == 200) setSuccess("User created successfully");
-        else setError(response?.data?.details || "Failed to save user");
+        if (response.data.code == 200) {
+          setSuccess("User created successfully");
+          loadUsers();
+        } else {
+          setError(response?.data?.details || "Failed to save user");
+        }
       }
       setShowForm(false);
       setEditingUser(null);
       resetForm();
-      loadUsers();
     } catch (err) {
       setError(err.response?.data?.details || "Failed to save user");
     } finally {
@@ -104,7 +117,6 @@ const Users = () => {
       sms_alert: false,
     });
   };
-
   return (
     <div className="card">
       <h2>User Management</h2>
