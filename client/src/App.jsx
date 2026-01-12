@@ -19,7 +19,7 @@ function App() {
     // { id: "click2call", label: "Click2Call" },
     { id: "admin-click2call", label: "Click2Call (PSTN Calling)" },
     { id: "webrtc", label: "WebRTC Calls" },
-    // { id: "cdr", label: "Call Records" },
+    { id: "cdr", label: "Call Records" },
     // { id: "notes", label: "Notes" },
     // { id: "analysis", label: "Call Analysis" },
     // { id: "live", label: "Live Calls" },
@@ -48,7 +48,7 @@ function App() {
       {/* {activeTab === "click2call" && <Click2Call />} */}
       {activeTab === "admin-click2call" && <AdminClick2Call />}
       {activeTab === "webrtc" && <WebRTCCall />}
-      {/* {activeTab === "cdr" && <CDR />} */}
+      {activeTab === "cdr" && <CDR />}
       {/* {activeTab === "notes" && <Notes />} */}
       {/* {activeTab === "analysis" && <CallAnalysis />} */}
       {/* {activeTab === "live" && <LiveCalls />} */}
