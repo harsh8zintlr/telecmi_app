@@ -25,7 +25,6 @@ function App() {
     { id: "live", label: "Live Calls" },
   ];
 
-  console.log("In here", tabs);
   return (
     <div className="container">
       <div className="header">

@@ -71,18 +71,29 @@ app.post("/api/admin/token", async (req, res) => {
 app.post("/api/users/list", async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.body;
+
     const url = `${TELECMI_BASE_URL}/user/list`;
+
     const response = await axios.post(
       url,
-      appBody({ page: Number(page), limit: Number(limit) })
+      appBody({
+        page: Number(page),
+        limit: Number(limit),
+      })
     );
-    console.log(response);
-    res.json(response.data);
+
+    // ✅ Axios always puts payload in response.data
+    return res.status(200).json(response.data);
   } catch (err) {
-    console.error("Error listing users", err.response.data.msg.body);
-    res.status(500).json({
+    console.error("User list error:", {
+      message: err.message,
+      data: err.response?.data,
+      status: err.response?.status,
+    });
+
+    return res.status(err.response?.status || 500).json({
       error: "Failed to list users",
-      details: err.message,
+      details: err.response?.data || err.message,
     });
   }
 });
@@ -584,7 +595,6 @@ app.post("/api/admin/click2call", async (req, res) => {
       callerid: Number(callerid),
       token,
     });
-    console.log(response);
 
     res.json(response.data);
   } catch (err) {
@@ -602,7 +612,6 @@ app.post("/api/admin/click2call", async (req, res) => {
 app.post("/api/webhooks/cdr", (req, res) => {
   try {
     const data = req.body;
-    console.log("CDR Webhook received:", data);
 
     // Store CDR data
     if (data.cmiuuid) {
@@ -623,7 +632,6 @@ app.post("/api/webhooks/cdr", (req, res) => {
 app.post("/api/webhooks/events", (req, res) => {
   try {
     const data = req.body;
-    console.log("Event Webhook received:", data);
 
     // Store event data
     if (data.cmiuuid) {
