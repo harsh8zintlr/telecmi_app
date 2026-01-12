@@ -17,12 +17,12 @@ function App() {
     { id: "users", label: "Users" },
     { id: "login", label: "User Login" },
     // { id: "click2call", label: "Click2Call" },
-    { id: "admin-click2call", label: "Admin Click2Call" },
+    { id: "admin-click2call", label: "Click2Call (PSTN Calling)" },
     { id: "webrtc", label: "WebRTC Calls" },
-    { id: "cdr", label: "Call Records" },
-    { id: "notes", label: "Notes" },
-    { id: "analysis", label: "Call Analysis" },
-    { id: "live", label: "Live Calls" },
+    // { id: "cdr", label: "Call Records" },
+    // { id: "notes", label: "Notes" },
+    // { id: "analysis", label: "Call Analysis" },
+    // { id: "live", label: "Live Calls" },
   ];
 
   return (
@@ -48,10 +48,10 @@ function App() {
       {/* {activeTab === "click2call" && <Click2Call />} */}
       {activeTab === "admin-click2call" && <AdminClick2Call />}
       {activeTab === "webrtc" && <WebRTCCall />}
-      {activeTab === "cdr" && <CDR />}
-      {activeTab === "notes" && <Notes />}
-      {activeTab === "analysis" && <CallAnalysis />}
-      {activeTab === "live" && <LiveCalls />}
+      {/* {activeTab === "cdr" && <CDR />} */}
+      {/* {activeTab === "notes" && <Notes />} */}
+      {/* {activeTab === "analysis" && <CallAnalysis />} */}
+      {/* {activeTab === "live" && <LiveCalls />} */}
     </div>
   );
 }

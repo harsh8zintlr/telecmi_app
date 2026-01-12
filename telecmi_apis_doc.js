@@ -42,6 +42,7 @@ app.get("/api/health", (_req, res) => {
 
 // --- Auth / Admin ---
 // This just verifies that appid/secret are valid by calling account/balance.
+
 app.post("/api/admin/token", async (req, res) => {
   try {
     const appid = req.body.appid || TELECMI_APP_ID;
