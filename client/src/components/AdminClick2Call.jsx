@@ -88,7 +88,7 @@ const AdminClick2Call = () => {
                 setCallData({ ...callData, user_id: e.target.value })
               }
               required
-              placeholder="User ID"
+              placeholder="User ID (You can get it from Users Panel)"
             />
           </div>
           <div className="form-group">

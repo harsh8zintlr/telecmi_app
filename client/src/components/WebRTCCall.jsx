@@ -358,7 +358,7 @@ const WebRTCCall = () => {
                     setLoginData({ ...loginData, user_id: e.target.value })
                   }
                   required
-                  placeholder="User ID"
+                  placeholder="User ID (You can get it from Users Panel)"
                 />
               </div>
               <div className="form-group">
@@ -370,7 +370,7 @@ const WebRTCCall = () => {
                     setLoginData({ ...loginData, password: e.target.value })
                   }
                   required
-                  placeholder="Password"
+                  placeholder="Password (User Password you entered while creating user)"
                 />
               </div>
               <div className="form-group">

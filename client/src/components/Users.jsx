@@ -149,6 +149,7 @@ const Users = () => {
                   setFormData({ ...formData, extension: e.target.value })
                 }
                 required
+                placeholder="Enter any number between 100 to 900"
               />
             </div>
             <div className="form-group">
@@ -174,6 +175,7 @@ const Users = () => {
                   setFormData({ ...formData, phone_number: e.target.value })
                 }
                 required
+                placeholder="Start the Phone Number with 91"
               />
             </div>
             <div className="form-group">
@@ -200,7 +202,7 @@ const Users = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, start_time: e.target.value })
                 }
-                placeholder="900"
+                placeholder="9"
               />
             </div>
             <div className="form-group">
@@ -211,7 +213,7 @@ const Users = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, end_time: e.target.value })
                 }
-                placeholder="1800"
+                placeholder="17"
               />
             </div>
           </div>

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { userLogin, generateToken } from '../api/telecmi';
+import React, { useState } from "react";
+import { userLogin, generateToken } from "../api/telecmi";
 
 const UserLogin = () => {
   const [loginData, setLoginData] = useState({
-    id: '',
-    password: '',
+    id: "",
+    password: "",
   });
   const [tokenData, setTokenData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -22,13 +22,13 @@ const UserLogin = () => {
     try {
       const response = await userLogin(loginData);
       setLoginResult(response.data);
-      setSuccess('Login successful! Token saved.');
+      setSuccess("Login successful! Token saved.");
       if (response.data.token) {
-        localStorage.setItem('userToken', response.data.token);
-        localStorage.setItem('userId', response.data.agent?.id || loginData.id);
+        localStorage.setItem("userToken", response.data.token);
+        localStorage.setItem("userId", response.data.agent?.id || loginData.id);
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      setError(err.response?.data?.error || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -42,14 +42,14 @@ const UserLogin = () => {
 
     try {
       const response = await generateToken(tokenData);
-      setSuccess('Token generated successfully!');
+      setSuccess("Token generated successfully!");
       setLoginResult(response.data);
       // Save admin secret to localStorage if available
       if (response.data.secret) {
-        localStorage.setItem('adminSecret', response.data.secret);
+        localStorage.setItem("adminSecret", response.data.secret);
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to generate token');
+      setError(err.response?.data?.error || "Failed to generate token");
     } finally {
       setLoading(false);
     }
@@ -69,9 +69,11 @@ const UserLogin = () => {
             <input
               type="text"
               value={loginData.id}
-              onChange={(e) => setLoginData({ ...loginData, id: e.target.value })}
+              onChange={(e) =>
+                setLoginData({ ...loginData, id: e.target.value })
+              }
               required
-              placeholder="Enter user ID"
+              placeholder="Enter user ID (You can get it from Users Panel)"
             />
           </div>
 
@@ -80,25 +82,41 @@ const UserLogin = () => {
             <input
               type="password"
               value={loginData.password}
-              onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+              onChange={(e) =>
+                setLoginData({ ...loginData, password: e.target.value })
+              }
               required
-              placeholder="Enter password"
+              placeholder="Enter password (Password you entered while creating user)"
             />
           </div>
 
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         {loginResult && (
-          <div style={{ marginTop: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '5px' }}>
+          <div
+            style={{
+              marginTop: "20px",
+              padding: "15px",
+              background: "#f8f9fa",
+              borderRadius: "5px",
+            }}
+          >
             <h3>Login Result:</h3>
-            <pre style={{ background: 'white', padding: '10px', borderRadius: '5px', overflow: 'auto' }}>
+            <pre
+              style={{
+                background: "white",
+                padding: "10px",
+                borderRadius: "5px",
+                overflow: "auto",
+              }}
+            >
               {JSON.stringify(loginResult, null, 2)}
             </pre>
             {loginResult.token && (
-              <div style={{ marginTop: '10px' }}>
+              <div style={{ marginTop: "10px" }}>
                 <strong>Token:</strong> <code>{loginResult.token}</code>
               </div>
             )}
@@ -111,18 +129,36 @@ const UserLogin = () => {
         <p>Generate an admin secret token using app credentials</p>
 
         <form onSubmit={handleGenerateToken}>
-          <button type="submit" className="btn btn-secondary" disabled={loading}>
-            {loading ? 'Generating...' : 'Generate Token'}
+          <button
+            type="submit"
+            className="btn btn-secondary"
+            disabled={loading}
+          >
+            {loading ? "Generating..." : "Generate Token"}
           </button>
         </form>
 
         {loginResult && loginResult.secret && (
-          <div style={{ marginTop: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '5px' }}>
+          <div
+            style={{
+              marginTop: "20px",
+              padding: "15px",
+              background: "#f8f9fa",
+              borderRadius: "5px",
+            }}
+          >
             <h3>Token Result:</h3>
-            <pre style={{ background: 'white', padding: '10px', borderRadius: '5px', overflow: 'auto' }}>
+            <pre
+              style={{
+                background: "white",
+                padding: "10px",
+                borderRadius: "5px",
+                overflow: "auto",
+              }}
+            >
               {JSON.stringify(loginResult, null, 2)}
             </pre>
-            <div style={{ marginTop: '10px' }}>
+            <div style={{ marginTop: "10px" }}>
               <strong>Secret:</strong> <code>{loginResult.secret}</code>
             </div>
           </div>
@@ -133,4 +169,3 @@ const UserLogin = () => {
 };
 
 export default UserLogin;
-
